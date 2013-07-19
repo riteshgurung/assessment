@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Question Bank feature.
+ */
+
+include_once 'question_bank.features.inc';

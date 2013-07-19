@@ -1,0 +1,16 @@
+name = Question Bank
+description = Question Bank
+core = 7.x
+package = Features
+php = 5.2.4
+version = 7.x-1.0
+project = question_bank
+dependencies[] = features
+dependencies[] = field_collection
+dependencies[] = text
+features[features_api][] = api:2
+features[field_base][] = body
+features[field_base][] = field_answer
+features[field_instance][] = node-questions-field_answer
+features[node][] = questions
+project path = sites/all/modules/features
