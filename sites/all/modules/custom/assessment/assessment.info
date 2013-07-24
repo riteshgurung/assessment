@@ -1,0 +1,10 @@
+name = assessment
+description = assessment custom module
+package = Custom
+version = VERSION
+core = 7.x
+
+
+
+
+

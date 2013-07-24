@@ -1,0 +1,78 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function assessment_menu(){
+  $items = array();
+
+  $items['assessment/questions'] = array(
+    'title' => 'All Questions',
+    'description' => 'All Questions',
+    'type' => MENU_NORMAL_ITEM,
+    'page callback' => 'assessment_all_questions_title',
+    'access arguments' => array('access content'),
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function assessment_permission(){
+  $perms = array();
+
+  $perms['my custom permission'] = array(
+    'title' => '',
+    'description' => '',
+  );
+
+  return $perms;
+}
+
+/**
+ * Get titles for questions content type.
+ */
+function assessment_all_questions_title(){
+  $query = new EntityFieldQuery();
+  $query
+    ->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'questions')
+    ->propertyCondition('status', 1)
+    ->propertyOrderBy('created', 'DESC')
+    ->range(0,10);
+  $query->pager();
+  $result = $query->execute();
+
+  $output = array();
+
+  if (isset($result['node'])) {
+    $nids = array_keys($result['node']);
+    $nodes = entity_load('node', $nids);
+    $output['nodes'] = node_view_multiple($nodes, 'only_title');
+  }
+  else {
+    $output['status']['#markup'] = t('No results were returned.');
+  }
+  return $output;
+}
+
+/**
+* Implements hook_entity_info_alter().
+*/
+function assessment_entity_info_alter(&$entity_info) {
+  $entity_info['node']['view modes']['only_title'] = array(
+    'label' => t('Only Title'),
+    'custom settings' => TRUE,
+  );
+}
+
+/**
+* Implements hook_preprocess_node().
+*/
+/*function assessment_preprocess_node(&$vars) {
+  if($vars['view_mode'] == 'only_title') {
+    $vars['theme_hook_suggestions'][] = 'node__' . $vars['type'] . '__only_title';
+  }
+}*/
