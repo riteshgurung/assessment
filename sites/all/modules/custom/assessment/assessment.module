@@ -45,12 +45,31 @@ function assessment_all_questions_title(){
   $query->pager();
   $result = $query->execute();
 
-  $output = array();
+  $output = '';
 
   if (isset($result['node'])) {
     $nids = array_keys($result['node']);
-    $nodes = entity_load('node', $nids);
-    $output['nodes'] = node_view_multiple($nodes, 'only_title');
+    foreach($nids as $nid) {
+    $items= array();
+    $nodes = entity_metadata_wrapper('node', $nid);
+    $title = $nodes->title->value();
+    $type = 'ul';
+    // The following attributes apply to the list tag (e.g., <ol> or <ul>)
+    $attributes = array(
+      'id' => 'my-custom-listing',
+      'class' => 'custom-class another-custom-class', // a string or indexed (string) array with the classes for the list tag
+    );
+    foreach($nodes->field_answer->value() as $answer):
+      $items[] = array(
+        'data' => $answer->field_option_answer[LANGUAGE_NONE][0]['value'],
+        // 'id' => $account->uid, // be careful not to add another id attribute on the page that might be the same as one of the uids or your page will not validate
+        'class' => array('answers'), // value for 'class' key MUST be an (indexed) array. Using a string value like '2 3 4' produces an error
+      );
+      // _dbg($answer->field_option_answer[LANGUAGE_NONE][0]['value'],1);
+    endforeach;
+    // _dbg($nodes->field_answer->value(),1);
+    $output .= theme_item_list(array('items' => $items, 'title' => $title, 'type' => $type, 'attributes' => $attributes));
+  }
   }
   else {
     $output['status']['#markup'] = t('No results were returned.');
@@ -68,6 +87,14 @@ function assessment_entity_info_alter(&$entity_info) {
   );
 }
 
+
+
+function _dbg($var,$flag=0) {
+  echo '<pre>',var_dump($var),'</pre>';
+  if($flag) {
+    die();
+  }
+}
 /**
 * Implements hook_preprocess_node().
 */
