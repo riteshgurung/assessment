@@ -1,9 +1,9 @@
 <?php
 
-function assessment_install(){
-	variable_set('site_frontpage','assessment/questions');
+function assessment_install() {
+	variable_set('site_frontpage', 'assessment/questions');
 }
 
-function assessment_unistall(){
-	variable_set('site_frontpage','node');
+function assessment_uninstall() {
+	variable_set('site_frontpage', 'node');
 }

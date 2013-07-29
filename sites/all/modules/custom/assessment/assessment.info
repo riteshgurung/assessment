@@ -4,7 +4,8 @@ package = Custom
 version = VERSION
 core = 7.x
 
-files[] = css/style.css
+stylesheets[all][] = css/assessment.css
+stylesheets[all][] = css/flexslider.css
 
-
-
+scripts[] = scripts/jquery.flexslider-min.js
+scripts[] = scripts/assessment.js
